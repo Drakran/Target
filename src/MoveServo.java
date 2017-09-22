@@ -14,4 +14,6 @@ public class MoveServo
 		r.moveServo(RXTXRobot.SERVO2, 170); // Move Servo 2 to location 170 
 		r.close(); 
 	} 
+	
+	//Hi
 } 
