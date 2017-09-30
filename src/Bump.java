@@ -14,9 +14,10 @@ public class Bump {
 //			value = r.getDigitalPin(5).getValue(); //0 is non touch 1 is touch
 //			System.out.println("Value: " + value + "\n");
 //		}
-		while((r.getDigitalPin(5).getValue()) == 0) {
+		r.refreshDigitalPins();
+		while((r.getDigitalPin(4).getValue()) == 1) {
 			r.refreshDigitalPins();
-			System.out.println("Value: " + (r.getDigitalPin(5).getValue()) + "\n");
+			System.out.println("Value: " + (r.getDigitalPin(4).getValue()) + "\n");
 			r.sleep(300);
 		}
 		r.close();
