@@ -13,7 +13,7 @@ public class MoveServo
 //		r.attachServo(RXTXRobot.SERVO2, 10); 
 		r.moveServo(RXTXRobot.SERVO1, 180); // Move Servo 1 to location 30 
 		//r.moveServo(RXTXRobot.SERVO2, 170); // Move Servo 2 to location 170 
-		//r.close(); 
+		r.close(); 
 	} 
 } 
 //Hi
