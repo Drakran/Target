@@ -14,11 +14,21 @@ public class Bump {
 //			value = r.getDigitalPin(5).getValue(); //0 is non touch 1 is touch
 //			System.out.println("Value: " + value + "\n");
 //		}
-		r.refreshDigitalPins();
-		while((r.getDigitalPin(4).getValue()) == 1) {
-			r.refreshDigitalPins();
-			System.out.println("Value: " + (r.getDigitalPin(4).getValue()) + "\n");
-			r.sleep(300);
+		//r.refreshDigitalPins();
+//		while((r.getDigitalPin(4).getValue()) == 0) {
+//			//r.refreshDigitalPins();
+//			System.out.println("Value: " + (r.getDigitalPin(4).getValue()) + "\n");
+//			r.sleep(100);
+//		}
+		r.refreshAnalogPins();
+		while(true) {
+			r.refreshAnalogPins();
+			int temp = r.getAnalogPin(4).getValue();
+			System.out.println(temp);
+			if(temp <= 10) {
+				System.out.println("Something");
+				break;
+			}
 		}
 		r.close();
 
