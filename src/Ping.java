@@ -8,7 +8,7 @@ import rxtxrobot.*;
 
 public class Ping {
 
-	final private static int PING_PIN = 13; 
+	final private static int PING_PIN = 12; 
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -17,7 +17,6 @@ public class Ping {
 		r.connect(); 
 		int times = 10;
 		for(int x =0; x < times; x++) {
-			r.refreshDigitalPins();
 			System.out.println("Response: " + r.getPing(PING_PIN) + " cm"); 
 			r.sleep(300); 
 		}
