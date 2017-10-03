@@ -1,10 +1,5 @@
 import rxtxrobot.ArduinoNano;
 import rxtxrobot.RXTXRobot;
-import rxtxrobot.*;
-
-
-
-
 
 public class Ping {
 

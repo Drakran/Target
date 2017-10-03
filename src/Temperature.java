@@ -5,7 +5,6 @@ public class Temperature {
 
 	public static void main (String []args) {
 		RXTXRobot r = new ArduinoNano();
-		int[] array = {42,42,42};
 		r.setPort("COM5");
 		r.connect();
 		r.refreshAnalogPins();
