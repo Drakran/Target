@@ -5,7 +5,6 @@ import rxtxrobot.*;
 public class Bump {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		RXTXRobot r = new ArduinoNano(); // Create RXTXRobot object 
 		r.setPort("COM5"); // Set the port to COM3 
 		r.connect(); 
