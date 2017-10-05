@@ -16,12 +16,12 @@ public class Temperature {
 		int pin1 = 1;
 		double temp1 = (getAverage(pin0)/TIMES);
 		double temp2 = (getAverage(pin1)/TIMES);
-		System.out.println("ADC code Temp1 for Uncovered: " + temp1 + "\n");
+		System.out.println("ADC code Temp1 for Uncovered: " + temp1);
 		double reallyFinalTemp1 = calculateTemp(temp1);
-		System.out.println("TempOne(Uncovered): " + reallyFinalTemp1);
-		System.out.println("ADC code Temp2 for Uncovered: " + temp2 + "\n");
+		System.out.println("TempOne(Uncovered): " + reallyFinalTemp1 + "\n");
+		System.out.println("ADC code Temp2 for Uncovered: " + temp2);
 		double reallyFinalTemp2 = calculateTemp(temp2);
-		System.out.println("TempTwo(Covered): " + reallyFinalTemp2);
+		System.out.println("TempTwo(Covered): " + reallyFinalTemp2 + "\n");
 		double difference = reallyFinalTemp2 - reallyFinalTemp1;
 		System.out.println("Difference: " + difference); 
 		

@@ -5,6 +5,8 @@ public class MotorTest {
 
 	public static int right = RXTXRobot.MOTOR1;
 	public static int left = RXTXRobot.MOTOR2;
+	public static int rightSpeed = 300;
+	public static int leftSpeed = -320;
 	public static RXTXRobot r;
 	
 	public static void main(String[] args) {
@@ -21,8 +23,11 @@ public class MotorTest {
 		if(decision == 1) {
 			runMotorsMeters();
 		}
-		else {
+		else if(decision == 2) {
 			runBumpMotors();
+		}
+		else if(decision == 3) {
+			runEncodedMotors();
 		}
 		//r.runMotor(right, 300, left, -300, 4000);
 		r.close();
@@ -30,17 +35,25 @@ public class MotorTest {
 	}
 	
 	public static void runMotorsMeters() {
-		r.runMotor(right, 220, left, -200, 7250); // right motor must offset by 20 or around that
+		r.runMotor(right, rightSpeed, left, leftSpeed, 5250); // right motor must offset by 20 or around that1 6000 seconds
 	}
 	
 	public static void runBumpMotors() {
-		r.runMotor(right, 220, left, -200, 0); 
+		r.runMotor(right, rightSpeed, left, leftSpeed, 0); 
 		while(r.getAnalogPin(4).getValue() > 0) {
 			r.refreshAnalogPins();
 			if(r.getAnalogPin(4).getValue() == 0) {
 				break;
 			}
 		}
+	}
+	
+	public static int rTicks = 20;
+	public static int lTicks = 20;
+	public static void runEncodedMotors() {
+		//r.runEncodedMotor(right, rightSpeed, 10, left, leftSpeed, 10);
+		r.runEncodedMotor(right, 200, 10);
+		r.close();
 	}
 
 }

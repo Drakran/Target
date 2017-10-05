@@ -9,7 +9,7 @@ public class Ping {
 		RXTXRobot r = new ArduinoNano(); // Create RXTXRobot object 
 		r.setPort("COM5"); // Set the port to COM3 
 		r.connect(); 
-		int times = 10;
+		int times = 20;
 		for(int x =0; x < times; x++) {
 			if(r.getPing(PING_PIN) <= 30) {
 				System.out.println("Its less than 30 cm, the value is: " + r.getPing(PING_PIN) );
