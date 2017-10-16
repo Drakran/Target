@@ -18,8 +18,8 @@ import rxtxrobot.*;
 public class MainRobot {
 	
 	final private static int PING_PIN = 12; 
-	final private static int rightSpeed = 410;
-	final private static int leftSpeed = -300;
+	final private static int rightSpeed = 410; //pin5
+	final private static int leftSpeed = -300; //pin6
 	final private static int right = RXTXRobot.MOTOR1;
 	final private static int left = RXTXRobot.MOTOR2;
 	final private static int boom = RXTXRobot.SERVO2;
