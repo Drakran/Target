@@ -3,7 +3,7 @@ import rxtxrobot.*;
 
 public class Temperature {
 	
-	public static int TIMES = 100;
+	public static int TIMES = 10;
 	public static RXTXRobot r;
 
 	public static void main (String []args) 
@@ -19,12 +19,11 @@ public class Temperature {
 		System.out.println("ADC code Temp1 for Uncovered: " + temp1);
 		double reallyFinalTemp1 = calculateTemp(temp1);
 		System.out.println("TempOne(Uncovered): " + reallyFinalTemp1 + "\n");
-		System.out.println("ADC code Temp2 for Uncovered: " + temp2);
+		System.out.println("ADC code Temp2 for Covered: " + temp2);
 		double reallyFinalTemp2 = calculateTemp(temp2);
 		System.out.println("TempTwo(Covered): " + reallyFinalTemp2 + "\n");
 		double difference = reallyFinalTemp2 - reallyFinalTemp1;
 		System.out.println("Difference: " + difference); 
-		
 		
 		r.close();
 	}
@@ -38,6 +37,7 @@ public class Temperature {
 	public static double getAverage(int pin) {
 		double adc = 0;
 		for(int x =0; x < TIMES; x++) {
+			r.refreshAnalogPins();
 			adc += r.getAnalogPin(pin).getValue();
 		}
 		return adc;

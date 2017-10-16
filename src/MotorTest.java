@@ -2,11 +2,12 @@ import rxtxrobot.*;
 import java.util.Scanner;
 
 public class MotorTest {
-
+	//right is left, left is right
 	public static int right = RXTXRobot.MOTOR1;
 	public static int left = RXTXRobot.MOTOR2;
-	public static int rightSpeed = 300;
-	public static int leftSpeed = -320;
+	public static int rightSpeed = 410;
+	public static int leftSpeed = -300;
+	public static int distance = 5000;
 	public static RXTXRobot r;
 	
 	public static void main(String[] args) {
@@ -35,7 +36,7 @@ public class MotorTest {
 	}
 	
 	public static void runMotorsMeters() {
-		r.runMotor(right, rightSpeed, left, leftSpeed, 5250); // right motor must offset by 20 or around that1 6000 seconds
+		r.runMotor(right, rightSpeed, left, leftSpeed, distance); // right motor must offset by 20 or around that1 6000 seconds
 	}
 	
 	public static void runBumpMotors() {
