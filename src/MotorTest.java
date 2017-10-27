@@ -5,9 +5,9 @@ public class MotorTest {
 	//right is left, left is right
 	public static int right = RXTXRobot.MOTOR1;
 	public static int left = RXTXRobot.MOTOR2;
-	public static int rightSpeed = 410;
-	public static int leftSpeed = -300;
-	public static int distance = 5000;
+	public static int rightSpeed = -200; // -200
+	public static int leftSpeed = 255; // 245
+	public static int distance = 3500;
 	public static RXTXRobot r;
 	
 	public static void main(String[] args) {
