@@ -17,8 +17,8 @@ import rxtxrobot.*;
 
 public class MainRobot {
 	
-	final private static int FRONT_PING_PIN = 12; 
-	final private static int LEFT_PING_PIN = 11;
+	final private static int FRONT_PING_PIN = 8; 
+	final private static int LEFT_PING_PIN = 7;
 	final private static int RIGHT_PING_PIN = 10;
 	final private static int rightSpeed = -200; //pin5
 	final private static int leftSpeed = 250; //pin6
@@ -26,6 +26,7 @@ public class MainRobot {
 	final private static int rightRamp = -350;
 	final private static int right = RXTXRobot.MOTOR1;
 	final private static int left = RXTXRobot.MOTOR2;
+	final private static int cond = RXTXRobot.SERVO1;
 	final private static int boom = RXTXRobot.SERVO2;
 	//Declares the static robot object
 	public static RXTXRobot r;
@@ -69,6 +70,10 @@ public class MainRobot {
 //		
 //		//Move from canyon to ramp
 //		postCanyonMove(decision);
+//		//Across the Bridge
+//		acrossBridge();
+		//To Sandbox
+//		sandBoxDistance(decision);
 		r.close();
 		
 		
@@ -76,7 +81,7 @@ public class MainRobot {
 	
 	
 	/*
-	 * 
+	 * To Get
 	 */
 	public static void firstDistance() {
 		int firstDistance = 45;
@@ -133,9 +138,12 @@ public class MainRobot {
 	 * 
 	 */
 	public static void raiseBoom() {
-		MoveServos(180,boom);
-		r.sleep(2000);
+		MoveServos(160,boom);
+		r.sleep(10000);
 		Temperature();
+		r.sleep(10000);
+		MoveServos(90,boom);
+		r.sleep(2000);
 		//Finallize WindSpeed here
 	}
 	
@@ -144,12 +152,13 @@ public class MainRobot {
 	 */
 	public static void afterBoomDistance(int decision, int distance) {
 		if(decision == 0) {
-			Turn(left);
+			TurnRamp(left);
 			r.sleep(300);
 			MotorsDistance(distance); //Distance is eh?
 		}
 		else {
-			Turn(right);
+			TurnRamp(right);
+			MotorsDistance(distance);
 		}
 	}
 		
@@ -173,13 +182,19 @@ public class MainRobot {
 		}
 		
 	}
-	
-	public static void postCanyonMove(int decision) {
-		int fDistance = Ping(FRONT_PING_PIN);
-		while(fDistance > 60) {
-			MotorsIndefinite();
+	//THis is where it moves after it turns towards East(Where bridge is)
+	public static void postCanyonMove(int decision) {//Distance to wall after turn so it looks towards the bridgeside.
+		int distanceToWall = 30; 
+		//Goes to whatever wall is in front
+		boolean first = true;
+		MotorsIndefinite();
+		while(first) {
+			if(Ping(FRONT_PING_PIN) < distanceToWall) {
+				StopMotors();
+				first = false;
+			}
 		}
-		StopMotors();
+		//This distance is to north side wall
 		int sDistance;
 		if(decision == 0) {
 			sDistance = Ping(LEFT_PING_PIN);
@@ -187,8 +202,9 @@ public class MainRobot {
 		else {
 			sDistance = Ping(RIGHT_PING_PIN);
 		}
-		if(sDistance < 110) {
-			while(Ping(FRONT_PING_PIN) > 60) {
+		//If it is directly going to wall
+		if(sDistance < 60) {
+			while(Ping(FRONT_PING_PIN) > distanceToWall) {
 				MotorsIndefinite();
 			}
 			StopMotors();
@@ -201,16 +217,78 @@ public class MainRobot {
 		}
 		else {
 			if(decision == 0) {
+				Turn(left);
+				//This is what happens if it goes not direct
+				boolean secondOption = true;
+				MotorsIndefinite();
+				while(secondOption) {
+					//When its near what it would be if it went directly east
+					if(Ping(FRONT_PING_PIN) < 40) {
+						StopMotors();
+						secondOption = false;
+					}
+				}
 				Turn(right);
+				MotorsIndefinite();
+				secondOption = true;
+				while(secondOption) {
+					//When its near what it would be if it went directly east
+					if(Ping(FRONT_PING_PIN) < 30) {
+						StopMotors();
+						secondOption = false;
+					}
+				}
+				Turn(right);
+				
 			}
 			else {
-				Turn(left);
+				Turn(right);
 			}
 			MotorsIndefinite();
 			
 		}
 
 	}
+	
+	/*
+	 * Distance across Bridge
+	 */
+	public static void acrossBridge() {
+		//MotorsDistance(10000); //DOnt know if enough power
+		MotorsRamp(10000);
+	}
+	
+	/*
+	 * To Sandbow
+	 */
+	public static void sandBoxDistance(int decision) {
+		if(decision == 0) {
+			Turn(right);
+			r.sleep(1000);
+			MotorsIndefinite();
+			boolean x = true;
+			while(x) {
+				if(Ping(FRONT_PING_PIN) < 5) {
+					StopMotors();
+				}
+			}
+		}
+		else {
+			//Idk
+		}
+		MoveServos(40,cond);
+		r.sleep(2000);
+		if(cond < 5000) {
+			MoveServos(170,cond);
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	/*
 	 * Formula for calculating Temperature
 	 * @param the adc code really thats being sent
@@ -242,6 +320,7 @@ public class MainRobot {
 	 * Connects Servos
 	 */
 	public static void ConnectServos() {
+		r.attachServo(cond, 9);
 		r.attachServo(boom, 10); 
 	}
 	/*
@@ -264,9 +343,7 @@ public class MainRobot {
 	 */
 	public static void MoveServos(int angle, int servo) {
 		r.moveServo(servo, angle); // Move Servo 2 to location 170  //180
-		r.sleep(1000);
 		//r.moveServo(servo, 90);
-		r.sleep(2000);
 	}
 	/*
 	 * Motors Method, to run the Motors Indefinite
@@ -287,7 +364,17 @@ public class MainRobot {
 	}
 		
 
-	
+	/*
+	 * Conductivity, gets the conductivity from pin 12,13 analog 4,5
+	 * @return the Conductivity thing
+	 */
+	public static int getConductivity() {
+//		for(int x = 0; x < 10; x++) {
+//			
+//		}
+		int conCode = r.getConductivity();
+		return conCode;
+	}
 	
 	/*
 	 * Ping Method, gets Ping to a certain number of ties
@@ -323,6 +410,15 @@ public class MainRobot {
 	 * Turn Motors
 	 */
 	public static void Turn (int motor) {
+		if(motor == right) {
+			r.runMotor(right, 250, left, 258, 1300); //35-
+		}
+		else {
+			r.runMotor(right, -238, left, -250, 1230); //-300
+		}
+	}
+	
+	public static void TurnRamp (int motor) {
 		if(motor == right) {
 			r.runMotor(right, 250, left, 258, 1300); //35-
 		}
