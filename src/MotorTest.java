@@ -5,19 +5,21 @@ public class MotorTest {
 	//right is left, left is right
 	public static int right = RXTXRobot.MOTOR1;
 	public static int left = RXTXRobot.MOTOR2;
-	public static int rightSpeed = -200; // -200
-	public static int leftSpeed = 255; // 245
-	public static int distance = 3500;
+	public static int rightSpeed = 200; // -200
+	public static int leftSpeed = -210; // 300
+	public static int distance = 3000;
 	public static RXTXRobot r;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		r = new ArduinoNano();
+		//r.setMotorRampUpTime(600);
 		r.setPort("COM5");
 		r.connect();
 		r.setVerbose(true);
 		r.attachMotor(right, 5);
 		r.attachMotor(left, 6);
+		//r.runMotor(right, 0, left, 0, distance); 
 		Scanner scan = new Scanner(System.in);
 		int decision = scan.nextInt();
 		scan.close();
