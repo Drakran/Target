@@ -5,9 +5,9 @@ public class MotorTest {
 	//right is left, left is right
 	public static int right = RXTXRobot.MOTOR1;
 	public static int left = RXTXRobot.MOTOR2;
-	public static int rightSpeed = 200; // -200
-	public static int leftSpeed = -210; // 300
-	public static int distance = 3000;
+	public static int rightSpeed = -230; // -200
+	public static int leftSpeed = 241; // 300
+	public static int distance = 1000;
 	public static RXTXRobot r;
 	
 	public static void main(String[] args) {
@@ -19,6 +19,8 @@ public class MotorTest {
 		r.setVerbose(true);
 		r.attachMotor(right, 5);
 		r.attachMotor(left, 6);
+		r.attachServo(RXTXRobot.SERVO1, 9);
+		r.moveServo(RXTXRobot.SERVO1, 100);
 		//r.runMotor(right, 0, left, 0, distance); 
 		Scanner scan = new Scanner(System.in);
 		int decision = scan.nextInt();
