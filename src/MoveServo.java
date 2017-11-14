@@ -19,8 +19,8 @@ public class MoveServo
 		r.sleep(3000);//Connect the servos to the Arduino 
 //		r.moveServo(RXTXRobot.SERVO1, 0); // Move Servo 1 to location 30   //360
 //		r.moveServo(RXTXRobot.SERVO1, reverse);
-		r.attachServo(RXTXRobot.SERVO1, 9); 
-		r.moveServo(RXTXRobot.SERVO1, 100); // Move Servo 2 to location 170  //180
+		r.attachServo(RXTXRobot.SERVO2, 8); 
+		r.moveServo(RXTXRobot.SERVO2, 100); // Move Servo 2 to location 170  //180
 //		r.sleep(5000);
 //		r.moveServo(RXTXRobot.SERVO1, 40);
 //		r.sleep(2000);
