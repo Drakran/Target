@@ -21,7 +21,7 @@ public class MainRobot {
 	final private static int LEFT_PING_PIN = 11; //ACTUALLY SIDE PING PIN 
 	final private static int rightSpeed = -180; //pin5
 	final private static int leftSpeed = 190; //pin6
-	final private static int leftRamp = 250
+	final private static int leftRamp = 280
 			;
 	final private static int rightRamp = -250;
 	final private static int right = RXTXRobot.MOTOR1;
@@ -40,7 +40,7 @@ public class MainRobot {
 		r.setResetOnClose(false);
 		ConnectMotors();
 		ConnectServos();
-//		r.moveServo(cond, 70);
+		r.moveServo(cond, 40);
 		Scanner scan = new Scanner(System.in);
 		int decision = scan.nextInt();
 		scan.close();
@@ -51,35 +51,36 @@ public class MainRobot {
 //		r.runMotor(right, , left, 0, 1000);
 		r.sleep(2000);
 
-	firstDistance();
- 		r.sleep(1000);
-  		firstTurn(decision);
-  		int anotherBarrier = 46;
-  		int timeRamp = 3300; //How long to get to time
-  		barrierDistance(45);
- 		barrierWait(anotherBarrier,timeRamp);
-  		r.sleep(1000); //Makes me feel better
-//  		  		
-//  		  //Raise Boom and Collect  Temperature
-  		raiseBoom();
-//  		 		
-// 	//Turn in canyon and before move out of canyon
-//  		 //		//Turn again
-  		afterBoomDistance(decision,2000); //2nd variable is time after boom lift		
-
+//		firstDistance();
+// 		r.sleep(1000);
+// 		firstTurn(decision);
+//  		int anotherBarrier = 45;
+//  		int timeRamp = 2950; //How long to get to time
+// 		barrierDistance(45);
+// 		barrierWait(anotherBarrier,timeRamp,decision);
+// 		r.sleep(1000); //Makes me feel better
+//////////  		  		
+//////////  		  //Raise Boom and Collect  Temperature
+// 		raiseBoom();
+//////  		 		
+////// 	//Turn in canyon and before move out of canyon
+//////  		 //		//Turn again
+		afterBoomDistance(decision,2000); //2nd variable is time after boom lift		
+//////
+//////		
+//////		//Turn in canyon and before move out of canyon
+		canyonMove(decision);
+//		r.sleep(1000);
 ////		
-//		//Turn in canyon and before move out of canyon
-  		canyonMove(decision);
-		r.sleep(1000);
-//		
-//		//Move from canyon to ramp
+////		//Move from canyon to ramp
 		postCanyonMove(decision);
 //		//Across the Bridge
-//		acrossBridge();
+		acrossBridge(decision);
 ////		To Sandbox
-//		sandBoxDistance(decision);
-//		r.moveServo(cond, 40);
-		r.sleep(2000);
+		sandBoxDistance(decision);
+////		r.moveServo(cond, 40);
+//		r.sleep(2000);
+		Conductivity();
 //		System.out.println(getConductivity());
 		r.close();
 		
@@ -92,7 +93,7 @@ public class MainRobot {
 	 * IT uses while loop to detect the 50cm till the wall and stops
 	 */
 	public static void firstDistance() {
-		int firstDistance = 55;
+		int firstDistance = 65;
 		MotorsIndefinite();
 		boolean distance = true;
 		while(distance) {
@@ -112,10 +113,10 @@ public class MainRobot {
 	public static void firstTurn(int decision) {
 		if(decision == 0) {
 			//r.runMotor(right, 250, left, 280, 1350);
-			TurnValues(right, 250, 250,1220); 
+			TurnValues(right, 250, 250,1425); 
 		}
 		else {
-			TurnValues(left, -250,-250, 1170);
+			TurnValues(left, -250,-250, 1290);
 		}
 	}
 	
@@ -141,11 +142,17 @@ public class MainRobot {
 	 * (i.e. 60 is the distance between ramp and robot without barrier
 	 * @param time how long to get to ramp
 	 */
-	public static void barrierWait(int distance, int time) {
+	public static void barrierWait(int distance, int time, int decision) {
 		boolean something = true;
 		while(something) {
 			if(Ping(FRONT_PING_PIN) > distance) {
-				MotorsRamp(time);
+				if(decision == 0) {
+					MotorsRamp(2950);
+					something = false;
+				}
+				else {
+					MotorsRamp(3150);
+				}
 				something = false;
 			}
 		}
@@ -155,7 +162,7 @@ public class MainRobot {
 	 * Raises the boom, and detects tempearture
 	 */
 	public static void raiseBoom() {
-		r.moveServo(RXTXRobot.SERVO2, 140); // Move Servo 2 to location 170  //180
+		r.moveServo(RXTXRobot.SERVO2, 130); // Move Servo 2 to location 170  //180
 		
 		r.sleep(10000);
 		Temperature();
@@ -177,7 +184,7 @@ public class MainRobot {
 		}
 		else {
 			TurnRamp(right);
-			MotorsRampDistance(distance);
+			MotorsRampDistance(3500);
 		}
 	}
 	/*
@@ -189,7 +196,8 @@ public class MainRobot {
 			boolean wait = true;
 			MotorsIndefiniteNew();
 			while(wait) {
-				if(Ping(LEFT_PING_PIN) > 100) {
+				if(Ping(LEFT_PING_PIN) > 80) {
+					r.sleep(300);
 					System.out.println(Ping(LEFT_PING_PIN));
 					StopMotors();
 					break;
@@ -199,24 +207,24 @@ public class MainRobot {
 			}
 			r.sleep(2000);
 			//TUrns left
-			TurnValues(left, -260,-250,1300);
+			TurnValues(left, -260,-250,1100);
 		}
 
 		else {
 			boolean wait = true;
 			MotorsIndefiniteNew();
 			while(wait) {
-				System.out.println(Ping(LEFT_PING_PIN));
-				if(r.getPing(LEFT_PING_PIN) > 90) {
-					r.sleep(300);
-					r.runMotor(right, 0, left, 0, 0);
+			//	System.out.println(Ping(LEFT_PING_PIN));
+				if(r.getPing(LEFT_PING_PIN) > 80) {
+					r.sleep(400);
+					StopMotors();
 					break;
 				}
 
 			}
 			r.sleep(2000);
 			//TUrns right
-			TurnValues(right, 250,250,1500); //1350
+			TurnValues(right, 250,250,1650); //1350
 		}
 		
 	}
@@ -231,15 +239,15 @@ public class MainRobot {
 		int distanceToWall = 60; 
 		//Goes to whatever wall is in front
 		boolean first = true;
-//		MotorsDistance(2250);
+		MotorsDistance(2700);
 		
-		MotorsIndefinite();
-		while(first) {
-			if(Ping(FRONT_PING_PIN) < distanceToWall) {
-				StopMotors();
-				first = false;
-			}
-		}
+//		MotorsIndefinite();
+//		while(first) {
+//			if(Ping(FRONT_PING_PIN) < distanceToWall) {
+//				StopMotors();
+//				first = false;
+//			}
+//		}
 		//This distance is to north side wall
 		int sDistance;
 		r.sleep(1000);
@@ -253,30 +261,30 @@ public class MainRobot {
 			}
 			StopMotors();
 			if(decision == 0) {
-				r.runMotor(right, 250, left, 250, 1600);
+				backItUp(decision);
 			}
 			else {
-				TurnValues(left,-250,-250,1400);
+				backItUp(decision);
 			}
 		}
 		//IS if doesn't go directly, and needs to turn multiples times
 		else {
 			if(decision == 0) {
 				//r.runMotor(right, -260, left, -255, 1400); // first left
-				TurnValues(left, -250,-250,1350); //First LEft
+				TurnValues(left, -250,-250,1275); //First LEft
 				//This is what happens if it goes not direct
 				boolean secondOption = true;
 				MotorsIndefinite();
 				while(secondOption) {
 					//When its near what it would be if it went directly east
-					if(Ping(FRONT_PING_PIN) < 60) {
+					if(Ping(FRONT_PING_PIN) < 78) {
 						StopMotors();
 						secondOption = false;
 					}
 				}
 				r.sleep(1000);
 				//r.runMotor(right, 250, left, 290, 1350);
-				TurnValues(right, 250, 290, 1400);
+				TurnValues(right, 250, 290, 1200);
 				r.sleep(1000);
 				MotorsIndefinite();
 				secondOption = true;
@@ -288,37 +296,39 @@ public class MainRobot {
 					}
 				}
 				//r.runMotor(right, 250, left, 260, 1300);
-				TurnValues(right, 250, 260, 1300);
+				//TurnValues(right, 250, 260, 1300);
+				backItUp(decision);
 				
 			}
 			else {
 				//r.runMotor(right, -260, left, -255, 1400); // first right
-				TurnValues(right, 250,250,1300); //TEST
+				TurnValues(right, 250,250,1450); //TEST
 				//This is what happens if it goes not direct
 				boolean secondOption = true;
 				MotorsIndefinite();
 				while(secondOption) {
 					//When its near what it would be if it went directly east
-					if(Ping(FRONT_PING_PIN) < 70) {
+					if(Ping(FRONT_PING_PIN) < 78) {
+						r.sleep(100);
 						StopMotors();
 						break;
 					}
 				}
 				r.sleep(1000);
-				TurnValues(left, -250, -250, 1150); //TEST
+				TurnValues(left, -250, -250, 1200); //TEST
 				r.sleep(1000);
 				MotorsIndefinite();
 				secondOption = true;
 				while(secondOption) {
 					//When its near what it would be if it went directly east
-					if(Ping(FRONT_PING_PIN) < 30) {
+					if(Ping(FRONT_PING_PIN) < 50) {
 						StopMotors();
 						break;
 					}
 				}
-				r.runMotor(right, 190, left, -180, 200);
+				
 				r.sleep(500);
-				TurnValues(left, -250, -250, 1400); //1200
+			//	TurnValues(left, -250, -250, 1400); //1200
 				backItUp(decision);
 			}
 			//MotorsIndefinite();
@@ -329,16 +339,30 @@ public class MainRobot {
 	
 	public static void backItUp(int decision) {
 		if(decision == 0) {
-		//	TurnValues(right,-250,-250,2600);
+			r.sleep(1000);
+			TurnValues(right,-250,-250,2600); //180
+			r.sleep(1000);
+			r.runMotor(right, 240, left, -230, 2000); //Reverse 180
+			r.sleep(1000);
+			r.runMotor(right, rightSpeed, left, leftSpeed, 300);
+			r.sleep(1000);
+			TurnValues(left, -250, -250, 800);// turn left
 			r.sleep(1000);
 			r.runMotor(right, 200, left, -200, 3000);
 			r.sleep(1000);
 		//	TurnValues(left,-250,-250,1300);
 		}
 		else {
-		//	TurnValues(left,-250,-250,2600);
 			r.sleep(1000);
-			r.runMotor(right, 200, left, -200, 3000);
+			TurnValues(left,-250,-250,2600);
+			r.sleep(1000);
+			r.runMotor(right, 190, left, -180, 2000); //reverse 180
+			r.sleep(1000);
+			r.runMotor(right, rightSpeed, left, leftSpeed, 300);
+			r.sleep(1000);
+			TurnValues(right, 250, 250, 1180);
+			r.sleep(1000);
+			r.runMotor(right, 220, left, -220, 3000);
 			r.sleep(1000);
 		//	TurnValues(right, 250, 250, 1400);
 			
@@ -348,9 +372,15 @@ public class MainRobot {
 	/*
 	 * Distance across Bridge
 	 */
-	public static void acrossBridge() {
+	public static void acrossBridge(int decision) {
 		//MotorsDistance(10000); //DOnt know if enough power
-		MotorsRamp(6000);
+		if(decision == 0) {
+			MotorsRampBridge(7600);
+		}
+		else {
+			MotorsRampBridge(8100);
+		}
+		
 	}
 	
 	/*
@@ -359,34 +389,44 @@ public class MainRobot {
 	 */
 	public static void sandBoxDistance(int decision) {
 		if(decision == 0) {
-			TurnValues(right, 250, 280, 1350);
+			r.sleep(1000);
+			TurnValues(right, 250, 250, 1450);
 			r.sleep(1000);
 			MotorsIndefiniteNew();
 			boolean x = true;
 			while(x) {
-				if(Ping(FRONT_PING_PIN) < 10) {
+				if(Ping(FRONT_PING_PIN) < 5) {
 					StopMotors();
+					x= false;
 				}
 			}
 		}
 		else {
-			TurnValues(left, -250, -280, 1350);
+			r.sleep(1000);
+			TurnValues(left, -250, -250, 1325);
 			r.sleep(1000);
 			MotorsIndefiniteNew();
 			boolean x = true;
 			while(x) {
-				if(Ping(FRONT_PING_PIN) < 10) {
+				if(Ping(FRONT_PING_PIN) < 5) {
 					StopMotors();
+					x=false;
 				}
 			}
 			//Idk
 		}
-		MoveServos(40,cond);
+
+	}
+	
+	public static void Conductivity() {
 		r.sleep(2000);
-		if(cond < 5000) {
-			MoveServos(170,cond);
+		r.moveServo(cond, 20);
+		r.sleep(2000);
+		if(getConductivity() > 1) {
+			r.moveServo(cond, 130);
+			
 		}
-		
+		System.out.println(getConductivity());
 	}
 	
 	
@@ -473,8 +513,16 @@ public class MainRobot {
 		r.runMotor(right, rightRamp, left, leftRamp, distance);
 	}
 	
+	public static void MotorsRampBridge(int distance) {
+		r.runMotor(right, -200, left, 220, distance); //left 215
+	}
+	
+	public static void MotorsRampBridgeRight(int distance) {
+		r.runMotor(right, -210, left, 200, distance);
+	}
+	
 	public static void MotorsRampDistance(int distance){
-		r.runMotor(right, -157, left, 150, distance);
+		r.runMotor(right, -130, left, 130, distance);
 	}
 		
 
@@ -517,7 +565,7 @@ public class MainRobot {
 		double tempCovered = calculateTemp(getAverage(coveredPin))  ;
 		System.out.println("Temp of Uncovered: " + tempUncovered);
 		System.out.println("Temp of Covered: " + ((tempCovered))); //DIsplays covdered -5
-		System.out.println("Wind Speed is " + (tempCovered  - tempUncovered));
+		System.out.println("Wind Speed is " + (tempCovered  - tempUncovered - 3));
 	}
 	
 	/*
@@ -534,10 +582,10 @@ public class MainRobot {
 	
 	public static void TurnRamp (int motor) {
 		if(motor == right) {
-			r.runMotor(right, 250, left, 250, 1100); //35-
+			r.runMotor(right, 250, left, 250, 1200); //35-
 		}
 		else {
-			r.runMotor(right, -250, left, -250, 1200); //-300
+			r.runMotor(right, -250, left, -250, 840); //-300
 		}
 	}
 	
