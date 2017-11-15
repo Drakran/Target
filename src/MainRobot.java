@@ -41,6 +41,7 @@ public class MainRobot {
 		ConnectMotors();
 		ConnectServos();
 		r.moveServo(cond, 40);
+		r.moveServo(boom,0);
 		Scanner scan = new Scanner(System.in);
 		int decision = scan.nextInt();
 		scan.close();
@@ -58,28 +59,25 @@ public class MainRobot {
 //  		int timeRamp = 2950; //How long to get to time
 // 		barrierDistance(45);
 // 		barrierWait(anotherBarrier,timeRamp,decision);
-// 		r.sleep(1000); //Makes me feel better
-//////////  		  		
-//////////  		  //Raise Boom and Collect  Temperature
-// 		raiseBoom();
-//////  		 		
-////// 	//Turn in canyon and before move out of canyon
-//////  		 //		//Turn again
-		afterBoomDistance(decision,2000); //2nd variable is time after boom lift		
-//////
+// 		r.sleep(1000); //Makes me feel better  		  		
+		 //Raise Boom and Collect  Temperature
+//		raiseBoom();
+ 		//Turn in canyon and before move out of canyon
+ 		//Turn again
+//		afterBoomDistance(decision,2000); //2nd variable is time after boom lift				
+		//Turn in canyon and before move out of canyon
+//		canyonMove(decision);
+////		r.sleep(1000);
 //////		
-//////		//Turn in canyon and before move out of canyon
-		canyonMove(decision);
-//		r.sleep(1000);
-////		
-////		//Move from canyon to ramp
-		postCanyonMove(decision);
-//		//Across the Bridge
-		acrossBridge(decision);
-////		To Sandbox
-		sandBoxDistance(decision);
+//////		//Move from canyon to ramp
+//		postCanyonMove(decision);
+////		//Across the Bridge
+//		acrossBridge(decision);
+//////		To Sandbox
+//		sandBoxDistance(decision);
 ////		r.moveServo(cond, 40);
 //		r.sleep(2000);
+		
 		Conductivity();
 //		System.out.println(getConductivity());
 		r.close();
@@ -162,12 +160,12 @@ public class MainRobot {
 	 * Raises the boom, and detects tempearture
 	 */
 	public static void raiseBoom() {
-		r.moveServo(RXTXRobot.SERVO2, 130); // Move Servo 2 to location 170  //180
+		r.moveServo(RXTXRobot.SERVO2, 92); // Move Servo 2 to location 170  //180
 		
 		r.sleep(10000);
 		Temperature();
 		r.sleep(5000);
-		r.moveServo(RXTXRobot.SERVO2, 10);
+		r.moveServo(RXTXRobot.SERVO2, 0);
 		//Finallize WindSpeed here
 	}
 	
@@ -216,7 +214,7 @@ public class MainRobot {
 			while(wait) {
 			//	System.out.println(Ping(LEFT_PING_PIN));
 				if(r.getPing(LEFT_PING_PIN) > 80) {
-					r.sleep(400);
+					r.sleep(415);
 					StopMotors();
 					break;
 				}
@@ -362,7 +360,7 @@ public class MainRobot {
 			r.sleep(1000);
 			TurnValues(right, 250, 250, 1180);
 			r.sleep(1000);
-			r.runMotor(right, 220, left, -220, 3000);
+			r.runMotor(right, 220, left, -220, 3500);
 			r.sleep(1000);
 		//	TurnValues(right, 250, 250, 1400);
 			
@@ -422,11 +420,12 @@ public class MainRobot {
 		r.sleep(2000);
 		r.moveServo(cond, 20);
 		r.sleep(2000);
-		if(getConductivity() > 1) {
+		double condu = getConductivity();
+		if(condu > 1) {
 			r.moveServo(cond, 130);
 			
 		}
-		System.out.println(getConductivity());
+		System.out.println(condu);
 	}
 	
 	
@@ -534,8 +533,8 @@ public class MainRobot {
 //		for(int x = 0; x < 10; x++) {
 //			
 //		}
-		double conCode = r.getConductivity();
-		conCode = (-9.964 * conCode) + 1019.4;
+		double conCode = r.getConductivity() + 43;
+		conCode = (-0.098 * conCode) + 100.02;
 		return conCode;
 	}
 	
@@ -559,10 +558,12 @@ public class MainRobot {
 	 * Temperature Method
 	 */
 	public static void Temperature() {
-		int uncoveredPin = 2;
+		int uncoveredPin = 3;
 		int coveredPin = 1;
-		double tempUncovered = calculateTemp(getAverage(uncoveredPin));
-		double tempCovered = calculateTemp(getAverage(coveredPin))  ;
+		double tempUncovered = 0;
+		double tempCovered = 0;
+		 tempUncovered = calculateTemp(getAverage(uncoveredPin));
+		 tempCovered = calculateTemp(getAverage(coveredPin)) ;
 		System.out.println("Temp of Uncovered: " + tempUncovered);
 		System.out.println("Temp of Covered: " + ((tempCovered))); //DIsplays covdered -5
 		System.out.println("Wind Speed is " + (tempCovered  - tempUncovered - 3));

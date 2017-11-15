@@ -12,7 +12,7 @@ public class Temperature {
 		r.setPort("COM5");
 		r.connect();
 		r.refreshAnalogPins();
-		int pin0 = 2;
+		int pin0 = 3;
 		int pin1 = 1;
 		double temp1 = (getAverage(pin0)/TIMES);
 		double temp2 = (getAverage(pin1)/TIMES);
